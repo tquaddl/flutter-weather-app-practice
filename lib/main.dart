@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:velocity_x/velocity_x.dart';
+import 'package:intl/intl.dart';
+import 'consts/strings.dart';
 
 void main() {
   runApp(const MyApp());
@@ -9,60 +13,116 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
+    return GetMaterialApp(
+      title: 'Weather App',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        fontFamily: 'poppins',
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const WeatherApp(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
+class WeatherApp extends StatelessWidget {
+  const WeatherApp({super.key});
 
   @override
   Widget build(BuildContext context) {
+    var date = DateFormat('yMMMd').format(DateTime.now());
+
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
+        title: '$date'.text.gray700.make(),
+        backgroundColor: Colors.transparent,
+        elevation: 0.0,
+        actions: [
+          IconButton(
+              onPressed: () {},
+              icon: Icon(
+                Icons.light_mode,
+                color: Vx.gray600,
+              )),
+          IconButton(
+              onPressed: () {},
+              icon: Icon(
+                Icons.more_vert,
+                color: Vx.gray600,
+              ))
+        ],
       ),
-      body: Center(
+      body: Container(
+        padding: EdgeInsets.all(12),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            'MINSK'
+                .text
+                .fontFamily('poppins_bold')
+                .size(32)
+                .letterSpacing(3)
+                .make(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Image.asset(
+                  'assets/weather/01d.png',
+                  width: 80,
+                  height: 80,
+                ),
+                RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: '37$degree',
+                        style: TextStyle(
+                          color: Vx.gray900,
+                          fontSize: 64,
+                          fontFamily: 'poppins',
+                        ),
+                      ),
+                      TextSpan(
+                        text: 'Sunny',
+                        style: TextStyle(
+                          color: Vx.gray700,
+                          letterSpacing: 3,
+                          fontSize: 14,
+                          fontFamily: 'poppins_light',
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                TextButton.icon(
+                  onPressed: null,
+                  icon: Icon(
+                    Icons.expand_less_rounded,
+                    color: Vx.gray400,
+                  ),
+                  label: '41$degree'.text.make(),
+                ),
+                TextButton.icon(
+                  onPressed: null,
+                  icon: Icon(
+                    Icons.expand_more_rounded,
+                    color: Vx.gray400,
+                  ),
+                  label: '26$degree'.text.make(),
+                ),
+              ],
+            ),
+            Row(
+              children: List.generate(3, (index) {
+                return Column();
+              }),
             ),
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
       ),
     );
   }
