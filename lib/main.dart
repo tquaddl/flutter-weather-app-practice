@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:intl/intl.dart';
 import 'package:weather_app/consts/colors.dart';
+import 'package:weather_app/controllers/themeController.dart';
+import 'package:weather_app/our_themes.dart';
 import 'consts/strings.dart';
 import 'consts/images.dart';
 
@@ -16,12 +18,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      title: 'Weather App',
-      theme: ThemeData(
-        fontFamily: 'poppins',
-        useMaterial3: true,
-      ),
+      theme: CustomThemes.lightTheme,
+      darkTheme: CustomThemes.darkTheme,
+      themeMode: ThemeMode.system,
+      debugShowCheckedModeBanner: false,
       home: const WeatherApp(),
+      title: 'Weather App',
     );
   }
 }
@@ -32,25 +34,34 @@ class WeatherApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var date = DateFormat('yMMMd').format(DateTime.now());
+    var theme = Theme.of(context);
+    var controller = Get.put(ThemeController());
 
     return Scaffold(
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
-        title: '$date'.text.gray700.make(),
+        title: date.text.color(theme.primaryColor).make(),
         backgroundColor: Colors.transparent,
         elevation: 0.0,
         actions: [
-          IconButton(
-              onPressed: () {},
+          Obx(
+            () => IconButton(
+              onPressed: () {
+                controller.changeTheme();
+              },
               icon: Icon(
-                Icons.light_mode,
-                color: Vx.gray600,
-              )),
+                controller.isDark.value ? Icons.light_mode : Icons.dark_mode,
+                color: theme.iconTheme.color,
+              ),
+            ),
+          ),
           IconButton(
-              onPressed: () {},
-              icon: Icon(
-                Icons.more_vert,
-                color: Vx.gray600,
-              ))
+            onPressed: () {},
+            icon: Icon(
+              Icons.more_vert,
+              color: theme.iconTheme.color,
+            ),
+          ),
         ],
       ),
       body: Container(
@@ -65,6 +76,7 @@ class WeatherApp extends StatelessWidget {
                   .fontFamily('poppins_bold')
                   .size(32)
                   .letterSpacing(3)
+                  .color(theme.primaryColor)
                   .make(),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -80,7 +92,7 @@ class WeatherApp extends StatelessWidget {
                         TextSpan(
                           text: '37$degree',
                           style: TextStyle(
-                            color: Vx.gray900,
+                            color: theme.primaryColor,
                             fontSize: 64,
                             fontFamily: 'poppins',
                           ),
@@ -88,10 +100,10 @@ class WeatherApp extends StatelessWidget {
                         TextSpan(
                           text: 'Sunny',
                           style: TextStyle(
-                            color: Vx.gray700,
+                            color: theme.primaryColor,
                             letterSpacing: 3,
                             fontSize: 14,
-                            fontFamily: 'poppins_light',
+                            fontFamily: 'poppins',
                           ),
                         ),
                       ],
@@ -106,17 +118,17 @@ class WeatherApp extends StatelessWidget {
                     onPressed: null,
                     icon: Icon(
                       Icons.expand_less_rounded,
-                      color: Vx.gray400,
+                      color: theme.iconTheme.color,
                     ),
-                    label: '41$degree'.text.make(),
+                    label: '41$degree'.text.color(theme.iconTheme.color).make(),
                   ),
                   TextButton.icon(
                     onPressed: null,
                     icon: Icon(
                       Icons.expand_more_rounded,
-                      color: Vx.gray400,
+                      color: theme.iconTheme.color,
                     ),
-                    label: '26$degree'.text.make(),
+                    label: '26$degree'.text.color(theme.iconTheme.color).make(),
                   ),
                 ],
               ),
@@ -182,7 +194,12 @@ class WeatherApp extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  'Next 7 Days'.text.semiBold.size(16).make(),
+                  'Next 7 Days'
+                      .text
+                      .semiBold
+                      .size(16)
+                      .color(theme.primaryColor)
+                      .make(),
                   TextButton(
                     onPressed: () {},
                     child: 'View All'.text.make(),
@@ -197,19 +214,26 @@ class WeatherApp extends StatelessWidget {
                   var day = DateFormat('EEEE')
                       .format(DateTime.now().add(Duration(days: index + 1)));
                   return Card(
+                    color: theme.cardColor,
                     child: Container(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 0, vertical: 12),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Expanded(child: day.text.semiBold.make()),
+                          Expanded(
+                              child: day.text.semiBold
+                                  .color(theme.primaryColor)
+                                  .make()),
                           Expanded(
                             child: TextButton.icon(
                               onPressed: null,
                               icon: Image.asset('assets/weather/50n.png',
                                   width: 40),
-                              label: '26$degree'.text.gray800.make(),
+                              label: '26$degree'
+                                  .text
+                                  .color(theme.primaryColor)
+                                  .make(),
                             ),
                           ),
                           RichText(
@@ -218,7 +242,7 @@ class WeatherApp extends StatelessWidget {
                                 TextSpan(
                                   text: '37$degree',
                                   style: TextStyle(
-                                    color: Vx.gray800,
+                                    color: theme.primaryColor,
                                     fontFamily: 'poppins',
                                     fontSize: 16,
                                   ),
@@ -226,7 +250,7 @@ class WeatherApp extends StatelessWidget {
                                 TextSpan(
                                   text: '26$degree',
                                   style: TextStyle(
-                                    color: Vx.gray600,
+                                    color: theme.iconTheme.color,
                                     fontFamily: 'poppins',
                                     fontSize: 16,
                                   ),
