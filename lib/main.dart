@@ -4,6 +4,7 @@ import 'package:velocity_x/velocity_x.dart';
 import 'package:intl/intl.dart';
 import 'package:weather_app/consts/colors.dart';
 import 'package:weather_app/controllers/themeController.dart';
+import 'package:weather_app/models/currentWeatherModel.dart';
 import 'package:weather_app/our_themes.dart';
 import 'package:weather_app/services/api_Services.dart';
 import 'consts/strings.dart';
@@ -68,16 +69,19 @@ class WeatherApp extends StatelessWidget {
       body: Container(
         padding: EdgeInsets.all(12),
         child: FutureBuilder(
-          future: getCurrentWeather(),
+          future: controller.currentWeatherData,
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             if (snapshot.hasData) {
+              CurrentWeatherData data = snapshot.data;
+
               return SingleChildScrollView(
                 physics: const BouncingScrollPhysics(),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    'MINSK'
+                    '${data.name}'
                         .text
+                        .uppercase
                         .fontFamily('poppins_bold')
                         .size(32)
                         .letterSpacing(3)
@@ -87,7 +91,7 @@ class WeatherApp extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Image.asset(
-                          'assets/weather/01d.png',
+                          'assets/weather/${data.weather![0].icon}.png',
                           width: 80,
                           height: 80,
                         ),
@@ -95,7 +99,7 @@ class WeatherApp extends StatelessWidget {
                           text: TextSpan(
                             children: [
                               TextSpan(
-                                text: '37$degree',
+                                text: '${data.main!.temp}$degree',
                                 style: TextStyle(
                                   color: theme.primaryColor,
                                   fontSize: 64,
@@ -103,7 +107,7 @@ class WeatherApp extends StatelessWidget {
                                 ),
                               ),
                               TextSpan(
-                                text: 'Sunny',
+                                text: '${data.weather![0].main}',
                                 style: TextStyle(
                                   color: theme.primaryColor,
                                   letterSpacing: 3,
@@ -125,7 +129,7 @@ class WeatherApp extends StatelessWidget {
                             Icons.expand_less_rounded,
                             color: theme.iconTheme.color,
                           ),
-                          label: '41$degree'
+                          label: '${data.main!.tempMax}$degree'
                               .text
                               .color(theme.iconTheme.color)
                               .make(),
@@ -136,7 +140,7 @@ class WeatherApp extends StatelessWidget {
                             Icons.expand_more_rounded,
                             color: theme.iconTheme.color,
                           ),
-                          label: '26$degree'
+                          label: '${data.main!.tempMin}$degree'
                               .text
                               .color(theme.iconTheme.color)
                               .make(),
@@ -148,7 +152,11 @@ class WeatherApp extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: List.generate(3, (index) {
                         var iconsList = [clouds, humidity, windspeed];
-                        var values = ['70%', '40%', '3.5 km/h'];
+                        var values = [
+                          '${data.clouds!.all}%',
+                          '${data.main!.humidity}%',
+                          '${data.wind!.speed} km/h'
+                        ];
                         return Column(
                           children: [
                             Image.asset(

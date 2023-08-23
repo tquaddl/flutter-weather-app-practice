@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:weather_app/models/currentWeatherModel.dart';
 
 var link =
-    'https://api.openweathermap.org/data/2.5/weather?lat=$latitude&lon=$longitude&appid=$apiKey';
+    'https://api.openweathermap.org/data/2.5/weather?lat=$latitude&lon=$longitude&appid=$apiKey&units=metric';
 
 getCurrentWeather() async {
   var res = await http.get(Uri.parse(link));
