@@ -178,34 +178,43 @@ class WeatherApp extends StatelessWidget {
                     10.heightBox,
                     const Divider(),
                     10.heightBox,
-                    SizedBox(
-                      height: 150,
-                      child: ListView.builder(
-                        physics: const BouncingScrollPhysics(),
-                        scrollDirection: Axis.horizontal,
-                        shrinkWrap: true,
-                        itemCount: 6,
-                        itemBuilder: (BuildContext context, int index) {
-                          return Container(
-                            padding: EdgeInsets.all(8),
-                            margin: EdgeInsets.only(right: 4),
-                            decoration: BoxDecoration(
-                              color: cardColor,
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: Column(
-                              children: [
-                                '${index + 1} AM'.text.gray200.make(),
-                                Image.asset(
-                                  'assets/weather/09n.png',
-                                  width: 80,
-                                ),
-                                '38$degree'.text.white.make(),
-                              ],
+                    FutureBuilder(
+                      future: controller.hourlyWeatherData,
+                      builder: (BuildContext context, AsyncSnapshot snapshot) {
+                        if (snapshot.hasData) {
+                          return SizedBox(
+                            height: 150,
+                            child: ListView.builder(
+                              physics: const BouncingScrollPhysics(),
+                              scrollDirection: Axis.horizontal,
+                              shrinkWrap: true,
+                              itemCount: 6,
+                              itemBuilder: (BuildContext context, int index) {
+                                return Container(
+                                  padding: const EdgeInsets.all(8),
+                                  margin: const EdgeInsets.only(right: 4),
+                                  decoration: BoxDecoration(
+                                    color: cardColor,
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      '${index + 1} AM'.text.gray200.make(),
+                                      Image.asset(
+                                        'assets/weather/09n.png',
+                                        width: 80,
+                                      ),
+                                      '38$degree'.text.white.make(),
+                                    ],
+                                  ),
+                                );
+                              },
                             ),
                           );
-                        },
-                      ),
+                        } else {
+                          return const CircularProgressIndicator();
+                        }
+                      },
                     ),
                     10.heightBox,
                     const Divider(),

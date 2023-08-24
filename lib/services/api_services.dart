@@ -5,8 +5,9 @@ import 'package:weather_app/models/hourly_weather_model.dart';
 
 var link =
     'https://api.openweathermap.org/data/2.5/weather?lat=$latitude&lon=$longitude&appid=$apiKey&units=metric';
+
 var hourlyLink =
-    'api.openweathermap.org/data/2.5/forecast?lat=$latitude&lon=$longitude&appid=$apiKey&units=metric';
+    'https://api.openweathermap.org/data/2.5/forecast?lat=$latitude&lon=$longitude&appid=$apiKey&units=metric';
 
 getCurrentWeather() async {
   var res = await http.get(Uri.parse(link));
