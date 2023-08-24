@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:weather_app/consts/colors.dart';
 import 'package:weather_app/controllers/themeController.dart';
 import 'package:weather_app/models/current_weather_model.dart';
+import 'package:weather_app/models/hourly_weather_model.dart';
 import 'package:weather_app/our_themes.dart';
 import 'package:weather_app/services/api_services.dart';
 import 'consts/strings.dart';
@@ -182,14 +183,22 @@ class WeatherApp extends StatelessWidget {
                       future: controller.hourlyWeatherData,
                       builder: (BuildContext context, AsyncSnapshot snapshot) {
                         if (snapshot.hasData) {
+                          HourlyWeatherData hourlyData = snapshot.data;
+
                           return SizedBox(
                             height: 150,
                             child: ListView.builder(
                               physics: const BouncingScrollPhysics(),
                               scrollDirection: Axis.horizontal,
                               shrinkWrap: true,
-                              itemCount: 6,
+                              itemCount: hourlyData.list!.length > 6
+                                  ? 6
+                                  : hourlyData.list!.length,
                               itemBuilder: (BuildContext context, int index) {
+                                var time = DateFormat.jm().format(
+                                    DateTime.fromMillisecondsSinceEpoch(
+                                        hourlyData.list![index].dt!.toInt() *
+                                            1000));
                                 return Container(
                                   padding: const EdgeInsets.all(8),
                                   margin: const EdgeInsets.only(right: 4),
@@ -199,12 +208,15 @@ class WeatherApp extends StatelessWidget {
                                   ),
                                   child: Column(
                                     children: [
-                                      '${index + 1} AM'.text.gray200.make(),
+                                      time.text.gray200.make(),
                                       Image.asset(
-                                        'assets/weather/09n.png',
+                                        'assets/weather/${hourlyData.list![index].weather![0].icon}.png',
                                         width: 80,
                                       ),
-                                      '38$degree'.text.white.make(),
+                                      '${hourlyData.list![index].main!.temp}$degree'
+                                          .text
+                                          .white
+                                          .make(),
                                     ],
                                   ),
                                 );
