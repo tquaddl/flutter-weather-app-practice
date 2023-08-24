@@ -4,9 +4,9 @@ import 'package:velocity_x/velocity_x.dart';
 import 'package:intl/intl.dart';
 import 'package:weather_app/consts/colors.dart';
 import 'package:weather_app/controllers/themeController.dart';
-import 'package:weather_app/models/currentWeatherModel.dart';
+import 'package:weather_app/models/current_weather_model.dart';
 import 'package:weather_app/our_themes.dart';
-import 'package:weather_app/services/api_Services.dart';
+import 'package:weather_app/services/api_services.dart';
 import 'consts/strings.dart';
 import 'consts/images.dart';
 

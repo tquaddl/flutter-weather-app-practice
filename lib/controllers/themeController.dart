@@ -6,11 +6,13 @@ class ThemeController extends GetxController {
   @override
   void onInit() {
     currentWeatherData = getCurrentWeather();
+    hourlyWeatherData = getHourlyWeather();
     super.onInit();
   }
 
   var currentWeatherData;
   var isDark = false.obs;
+  var hourlyWeatherData;
 
   changeTheme() {
     isDark.value = !isDark.value;
